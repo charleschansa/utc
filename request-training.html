@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Training Consultants | Request Training</title>
+    <meta
+      name="description"
+      content="Submit your training or event registration request using our secure multi-step booking form."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="request-training-page">
+    <div id="site-header"></div>
+
+    <main>
+      <section class="hero hero-contact">
+        <div class="container hero-page-content">
+          <span class="eyebrow eyebrow-light">Request Training</span>
+          <h1>Register Interest</h1>
+          <p class="lead lead-light">
+            Complete the form below to register interest in a course, conference, or training program.
+          </p>
+        </div>
+      </section>
+
+      <section class="section section-tight">
+        <div class="container">
+          <article class="card registration-card">
+            <span class="eyebrow no-eyebrow-icon">Multi-Step Registration</span>
+            <h2>Registration Form</h2>
+
+            <ol class="registration-progress" data-registration-progress>
+              <li class="is-active">Company Details</li>
+              <li>Booking Details</li>
+              <li>Authorisation</li>
+              <li>Confirmation</li>
+            </ol>
+
+            <form class="contact-form registration-form" action="assets/api/send-training-registration.php" method="post" data-registration-form>
+              <input type="hidden" name="source" value="manual" data-registration-source />
+              <input type="hidden" name="event_key" value="" data-registration-event />
+              <input type="hidden" name="course_name" value="" data-course-name />
+              <input type="hidden" name="course_date" value="" data-course-date />
+              <input type="hidden" name="course_location" value="" data-course-location />
+              <input type="hidden" name="course_duration" value="" data-course-duration />
+              <input type="hidden" name="course_type" value="" data-course-type />
+
+              <section class="registration-step is-active" data-step="1">
+                <h3>Step 1: Company Details</h3>
+
+                <label for="company_name">Company Name</label>
+                <input id="company_name" name="company_name" type="text" required />
+
+                <label for="company_address">Address</label>
+                <textarea id="company_address" name="company_address" rows="3"></textarea>
+
+                <label for="company_phone">Phone Number</label>
+                <input id="company_phone" name="company_phone" type="tel" />
+
+                <label for="company_email">Company Email</label>
+                <input id="company_email" name="company_email" type="email" required />
+
+                <div class="selected-course-panel" data-selected-course-panel>
+                  <h4 data-selected-course-title>Selected Course</h4>
+                  <p data-selected-course-summary>No course selected yet. Open a course or event from the site to prefill details.</p>
+                </div>
+              </section>
+
+              <section class="registration-step" data-step="2" hidden>
+                <h3>Step 2: Booking Details</h3>
+
+                <label for="delegate_count">Number of Delegates</label>
+                <select id="delegate_count" name="delegate_count" required>
+                  <option value="">Select delegates</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10+">10+</option>
+                </select>
+
+                <label for="package_selection" data-package-label>Package Selection</label>
+                <select id="package_selection" name="package_selection" required>
+                  <option value="">Select package</option>
+                  <option value="1 Day - R3,500 per person">1 Day - R3,500 per person</option>
+                  <option value="2 Days - R7,500 per person">2 Days - R7,500 per person</option>
+                  <option value="3 Days - R8,999 per person">3 Days - R8,999 per person</option>
+                </select>
+
+                <p class="form-hint" data-package-pricing-note></p>
+
+                <div class="table-count-wrap" data-table-count-wrap hidden>
+                  <label for="table_count">Number of Tables</label>
+                  <input id="table_count" name="table_count" type="number" min="1" step="1" />
+                </div>
+              </section>
+
+              <section class="registration-step" data-step="3" hidden>
+                <h3>Step 3: Authorisation</h3>
+
+                <label for="manager_name">Authorising Manager Name</label>
+                <input id="manager_name" name="manager_name" type="text" required />
+
+                <label for="manager_email">Authorising Manager Email</label>
+                <input id="manager_email" name="manager_email" type="email" required />
+
+                <label for="manager_phone">Authorising Manager Phone</label>
+                <input id="manager_phone" name="manager_phone" type="tel" />
+
+                <label for="manager_designation">Designation</label>
+                <input id="manager_designation" name="manager_designation" type="text" />
+
+                <label class="terms-check">
+                  <input id="terms_accepted" name="terms_accepted" type="checkbox" required />
+                  <span>I confirm authorisation and agree to terms and conditions.</span>
+                </label>
+              </section>
+
+              <section class="registration-step" data-step="4" hidden>
+                <h3>Step 4: Confirmation</h3>
+                <p>Please review your details before submitting.</p>
+                <div class="registration-summary" data-registration-summary></div>
+              </section>
+
+              <div class="registration-actions">
+                <button class="btn btn-outline" type="button" data-step-back hidden>Back</button>
+                <button class="btn btn-primary" type="button" data-step-next>Next</button>
+                <button class="btn btn-primary" type="submit" data-step-submit hidden disabled>
+                  <span data-submit-text>Submit Registration</span>
+                </button>
+              </div>
+            </form>
+          </article>
+        </div>
+      </section>
+
+      <div id="site-cta"></div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/components.js"></script>
+    <script>
+      window.UTCComponents.initPage({
+        page: "request-training",
+        cta: {
+          title: "Need support with your registration?",
+          text: "Contact our team for tailored assistance with course selection, packages, and booking planning.",
+          buttonText: "Talk to Our Team",
+          buttonHref: "contact.html"
+        }
+      });
+    </script>
+  </body>
+</html>

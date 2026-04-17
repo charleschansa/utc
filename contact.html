@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Training Consultants | Contact</title>
+    <meta
+      name="description"
+      content="Get in touch with Ultimate Training Consultants to discuss your training needs and request a consultation."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="contact-page">
+    <div id="site-header"></div>
+
+    <main>
+      <section class="hero hero-contact">
+        <div class="container hero-page-content">
+          <span class="eyebrow eyebrow-light">Contact</span>
+          <h1>Request a Training Consultation</h1>
+          <p class="lead lead-light">
+            Get in touch with us to discuss your training needs and how we can support your organization.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="mailto:info@utc-sa.co.za">Email Us</a>
+            <a class="btn btn-outline-light" href="tel:+27871500724">Call Us</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tight">
+        <div class="container">
+          <article class="card contact-form-card">
+            <span class="eyebrow no-eyebrow-icon">Form</span>
+            <h3>Send Us a Message</h3>
+            <form class="contact-form" action="assets/api/send-contact.php" method="post" data-contact-form>
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" placeholder="Your full name" required />
+
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@organization.com" required />
+
+              <label for="organization">Organization</label>
+              <input id="organization" name="organization" type="text" placeholder="Organization name" required />
+
+              <label for="service">Service</label>
+              <select id="service" name="service" required>
+                <option value="">Select a service</option>
+                <option>In-House Training</option>
+                <option>Public Courses</option>
+                <option>eLearning &amp; Virtual Training</option>
+                <option>Recruitment &amp; Selection</option>
+              </select>
+
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell us about your training needs" required></textarea>
+
+              <button class="btn btn-primary" type="submit">Submit Inquiry</button>
+            </form>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-tight">
+        <div class="container">
+          <article class="card contact-map-card">
+            <span class="eyebrow no-eyebrow-icon">Map</span>
+            <h3>Find Us</h3>
+            <p class="contact-line">
+              <span class="contact-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.4 7 13 7 13s7-7.6 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5Z"/></svg></span>
+              <span>
+                Tower B Northlands Corner Shopping Centre<br />
+                2nd Floor, Northriding<br />
+                Johannesburg
+              </span>
+            </p>
+            <p class="contact-line"><span class="contact-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 2a8 8 0 1 1-8 8 8 8 0 0 1 8-8Zm-1 2h2v6l4 2-1 1.73-5-2.73V6Z"/></svg></span>Office hours: Monday to Friday, 8:30 AM to 5:00 PM</p>
+            <iframe
+              class="contact-map-frame"
+              title="UTC Office Location"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://maps.google.com/maps?q=Northlands%20Corner%20Shopping%20Centre%20Johannesburg&t=&z=13&ie=UTF8&iwloc=&output=embed"
+            ></iframe>
+          </article>
+        </div>
+      </section>
+
+      <div id="site-cta"></div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/components.js"></script>
+    <script>
+      window.UTCComponents.initPage({
+        page: "contact",
+        cta: {
+          title: "Ready to speak with our training team?",
+          text: "Share your requirements and we will respond with a focused consultation plan.",
+          buttonText: "Request Consultation",
+          buttonHref: "mailto:info@utc-sa.co.za"
+        }
+      });
+    </script>
+  </body>
+</html>

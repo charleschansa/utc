@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Training Consultants | Admin Dashboard</title>
+    <meta
+      name="description"
+      content="UTC admin dashboard for viewing contact inquiries and registration form submissions."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="admin-page">
+    <main>
+      <section class="section section-tight admin-hero">
+        <div class="container">
+          <span class="eyebrow no-eyebrow-icon">Admin</span>
+          <h1>Form Submissions Dashboard</h1>
+          <p class="lead">Monitor inquiries and training registrations in one place. Click any card to drill into live records.</p>
+        </div>
+      </section>
+
+      <section class="section section-tight">
+        <div class="container">
+          <article class="card admin-alert-card" id="adminError" hidden>
+            <h2>Dashboard Error</h2>
+            <p id="adminErrorText">Unable to load dashboard data.</p>
+          </article>
+
+          <div class="admin-stats-grid" id="adminStats" hidden>
+            <article class="card admin-stat-card is-active" data-metric="contact_total" role="button" tabindex="0" aria-label="Show all contact inquiries">
+              <h3>Total Contact Inquiries</h3>
+              <p class="admin-stat-value" id="statContactTotal">0</p>
+            </article>
+            <article class="card admin-stat-card" data-metric="contact_today" role="button" tabindex="0" aria-label="Show contact inquiries from today">
+              <h3>Contact Inquiries Today</h3>
+              <p class="admin-stat-value" id="statContactToday">0</p>
+            </article>
+            <article class="card admin-stat-card" data-metric="training_total" role="button" tabindex="0" aria-label="Show all training registrations">
+              <h3>Total Training Registrations</h3>
+              <p class="admin-stat-value" id="statTrainingTotal">0</p>
+            </article>
+            <article class="card admin-stat-card" data-metric="training_today" role="button" tabindex="0" aria-label="Show training registrations from today">
+              <h3>Registrations Today</h3>
+              <p class="admin-stat-value" id="statTrainingToday">0</p>
+            </article>
+          </div>
+
+          <div class="admin-tabs" data-admin-tabs id="adminTabs" hidden>
+            <div class="admin-active-filter" id="adminActiveFilter">Showing: All Contact Inquiries</div>
+            <div class="admin-tab-nav" role="tablist" aria-label="Dashboard data tabs">
+              <button class="admin-tab-btn is-active" type="button" data-admin-tab-target="contact" role="tab" aria-selected="true">Contact Inquiries</button>
+              <button class="admin-tab-btn" type="button" data-admin-tab-target="training" role="tab" aria-selected="false">Training Registrations</button>
+            </div>
+
+            <section class="admin-tab-panel is-active" data-admin-tab-panel="contact" role="tabpanel">
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Organization</th>
+                      <th>Service</th>
+                      <th>Message</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contactRows"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="admin-tab-panel" data-admin-tab-panel="training" role="tabpanel" hidden>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Course</th>
+                      <th>Date</th>
+                      <th>Location</th>
+                      <th>Company</th>
+                      <th>Company Email</th>
+                      <th>Delegates</th>
+                      <th>Package</th>
+                      <th>Manager</th>
+                      <th>Manager Email</th>
+                      <th>Created</th>
+                    </tr>
+                  </thead>
+                  <tbody id="trainingRows"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const errorCard = document.getElementById("adminError");
+        const errorText = document.getElementById("adminErrorText");
+        const statsRoot = document.getElementById("adminStats");
+        const tabsRoot = document.getElementById("adminTabs");
+        const activeFilterLabel = document.getElementById("adminActiveFilter");
+        const contactRowsRoot = document.getElementById("contactRows");
+        const trainingRowsRoot = document.getElementById("trainingRows");
+        const metricCards = Array.from(document.querySelectorAll(".admin-stat-card[data-metric]"));
+        let contactData = [];
+        let trainingData = [];
+
+        function escapeHtml(value) {
+          const text = String(value ?? "");
+          return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        async function handleContactStatusToggle(event) {
+          event.preventDefault();
+          const btn = event.target;
+          const contactId = parseInt(btn.getAttribute('data-contact-id'), 10);
+          const currentStatus = parseInt(btn.getAttribute('data-is-contacted'), 10);
+          const newStatus = currentStatus ? 0 : 1;
+
+          try {
+            btn.disabled = true;
+            const response = await fetch('assets/api/mark-contact-status.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id: contactId, is_contacted: newStatus })
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+              throw new Error(data.message || 'Unable to update status');
+            }
+
+            // Update the button state
+            btn.setAttribute('data-is-contacted', newStatus);
+            btn.textContent = newStatus ? 'Contacted' : 'Pending';
+            btn.classList.toggle('is-contacted', newStatus === 1);
+            btn.closest('tr').classList.toggle('is-contacted', newStatus === 1);
+
+            // Update the in-memory data
+            const contact = contactData.find(c => c.id === contactId);
+            if (contact) {
+              contact.is_contacted = newStatus;
+            }
+          } catch (error) {
+            alert('Failed to update status: ' + error.message);
+          } finally {
+            btn.disabled = false;
+          }
+        }
+
+        function setupTabs() {
+          const tabRoot = document.querySelector("[data-admin-tabs]");
+          if (!tabRoot) return;
+
+          const buttons = Array.from(tabRoot.querySelectorAll("[data-admin-tab-target]"));
+          const panels = Array.from(tabRoot.querySelectorAll("[data-admin-tab-panel]"));
+
+          function activateTab(target) {
+            buttons.forEach((button) => {
+              const active = button.getAttribute("data-admin-tab-target") === target;
+              button.classList.toggle("is-active", active);
+              button.setAttribute("aria-selected", active ? "true" : "false");
+            });
+
+            panels.forEach((panel) => {
+              const active = panel.getAttribute("data-admin-tab-panel") === target;
+              panel.classList.toggle("is-active", active);
+              panel.hidden = !active;
+            });
+          }
+
+          buttons.forEach((button) => {
+            button.addEventListener("click", function () {
+              activateTab(button.getAttribute("data-admin-tab-target"));
+            });
+          });
+
+          return activateTab;
+        }
+
+        const activateTab = setupTabs();
+
+        function isToday(dateText) {
+          if (!dateText) return false;
+          const source = String(dateText).slice(0, 10);
+          const now = new Date();
+          const yyyy = String(now.getFullYear());
+          const mm = String(now.getMonth() + 1).padStart(2, "0");
+          const dd = String(now.getDate()).padStart(2, "0");
+          return source === `${yyyy}-${mm}-${dd}`;
+        }
+
+        function setActiveMetric(metric) {
+          metricCards.forEach((card) => {
+            card.classList.toggle("is-active", card.getAttribute("data-metric") === metric);
+          });
+        }
+
+        function applyMetricView(metric) {
+          setActiveMetric(metric);
+
+          if (metric === "contact_total") {
+            if (typeof activateTab === "function") activateTab("contact");
+            activeFilterLabel.textContent = "Showing: All Contact Inquiries";
+            renderContactRows(contactData);
+            return;
+          }
+
+          if (metric === "contact_today") {
+            if (typeof activateTab === "function") activateTab("contact");
+            activeFilterLabel.textContent = "Showing: Contact Inquiries Today";
+            renderContactRows(contactData.filter((row) => isToday(row.created_at)));
+            return;
+          }
+
+          if (metric === "training_total") {
+            if (typeof activateTab === "function") activateTab("training");
+            activeFilterLabel.textContent = "Showing: All Training Registrations";
+            renderTrainingRows(trainingData);
+            return;
+          }
+
+          if (metric === "training_today") {
+            if (typeof activateTab === "function") activateTab("training");
+            activeFilterLabel.textContent = "Showing: Training Registrations Today";
+            renderTrainingRows(trainingData.filter((row) => isToday(row.created_at)));
+          }
+        }
+
+        metricCards.forEach((card) => {
+          card.addEventListener("click", function () {
+            applyMetricView(card.getAttribute("data-metric"));
+          });
+
+          card.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              applyMetricView(card.getAttribute("data-metric"));
+            }
+          });
+        });
+
+        function renderContactRows(rows) {
+          if (!rows.length) {
+            contactRowsRoot.innerHTML = '<tr><td colspan="8" class="admin-empty">No contact inquiries yet.</td></tr>';
+            return;
+          }
+
+          contactRowsRoot.innerHTML = rows.map((row) => {
+            const statusClass = row.is_contacted ? 'is-contacted' : '';
+            const statusLabel = row.is_contacted ? 'Contacted' : 'Pending';
+            return `
+              <tr class="${statusClass}">
+                <td>${escapeHtml(row.id)}</td>
+                <td>${escapeHtml(row.name)}</td>
+                <td><a href="mailto:${escapeHtml(row.email)}">${escapeHtml(row.email)}</a></td>
+                <td>${escapeHtml(row.organization)}</td>
+                <td>${escapeHtml(row.service)}</td>
+                <td class="admin-message-cell">${escapeHtml(row.message)}</td>
+                <td><button class="admin-status-btn ${statusClass}" type="button" data-contact-id="${escapeHtml(row.id)}" data-is-contacted="${row.is_contacted}">${statusLabel}</button></td>
+                <td>${escapeHtml(row.created_at)}</td>
+              </tr>
+            `;
+          }).join("");
+
+          // Attach event listeners to status buttons
+          contactRowsRoot.querySelectorAll('[data-contact-id]').forEach((btn) => {
+            btn.addEventListener('click', handleContactStatusToggle);
+          });
+        }
+
+        function renderTrainingRows(rows) {
+          if (!rows.length) {
+            trainingRowsRoot.innerHTML = '<tr><td colspan="11" class="admin-empty">No training registrations yet.</td></tr>';
+            return;
+          }
+
+          trainingRowsRoot.innerHTML = rows.map((row) => {
+            const tableMeta = row.table_count ? `<span class="admin-inline-meta">(Tables: ${escapeHtml(row.table_count)})</span>` : "";
+            return `
+              <tr>
+                <td>${escapeHtml(row.id)}</td>
+                <td>${escapeHtml(row.course_name || "General Registration")}</td>
+                <td>${escapeHtml(row.course_date || "")}</td>
+                <td>${escapeHtml(row.course_location || "")}</td>
+                <td>${escapeHtml(row.company_name)}</td>
+                <td><a href="mailto:${escapeHtml(row.company_email)}">${escapeHtml(row.company_email)}</a></td>
+                <td>${escapeHtml(row.delegate_count)}</td>
+                <td>${escapeHtml(row.package_selection)} ${tableMeta}</td>
+                <td>${escapeHtml(row.manager_name)}</td>
+                <td><a href="mailto:${escapeHtml(row.manager_email)}">${escapeHtml(row.manager_email)}</a></td>
+                <td>${escapeHtml(row.created_at)}</td>
+              </tr>
+            `;
+          }).join("");
+        }
+
+        async function loadDashboard() {
+          try {
+            const response = await fetch("assets/api/admin-dashboard-data.php", { method: "GET" });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+              throw new Error(data.message || "Unable to load dashboard data.");
+            }
+
+            document.getElementById("statContactTotal").textContent = data.stats.contact_total;
+            document.getElementById("statContactToday").textContent = data.stats.contact_today;
+            document.getElementById("statTrainingTotal").textContent = data.stats.training_total;
+            document.getElementById("statTrainingToday").textContent = data.stats.training_today;
+
+            contactData = data.contactRows || [];
+            trainingData = data.trainingRows || [];
+
+            renderContactRows(contactData);
+            renderTrainingRows(trainingData);
+
+            statsRoot.hidden = false;
+            tabsRoot.hidden = false;
+            applyMetricView("contact_total");
+          } catch (error) {
+            errorText.textContent = error.message || "Unable to load dashboard data.";
+            errorCard.hidden = false;
+          }
+        }
+
+        loadDashboard();
+      })();
+    </script>
+  </body>
+</html>

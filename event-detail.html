@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Training Consultants | Featured Event</title>
+    <meta
+      name="description"
+      content="Explore a featured UTC event with tailored event details, agenda highlights, and registration information."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="event-detail-page">
+    <div id="site-header"></div>
+
+    <main>
+      <section class="event2-hero" data-event-hero>
+        <div class="container event2-hero-inner">
+          <span class="eyebrow eyebrow-light">Featured Event</span>
+          <h1 data-event-title>Event title</h1>
+          <p class="lead lead-light" data-event-tagline>Event tagline</p>
+          <div class="event2-meta-row">
+            <span class="event2-meta-pill"><strong>Date:</strong> <span data-event-date></span></span>
+            <span class="event2-meta-pill"><strong>Location:</strong> <span data-event-location></span></span>
+            <span class="event2-meta-pill"><strong>Duration:</strong> <span data-event-duration></span></span>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" data-event-register href="#">Reserve Your Seat</a>
+            <a class="btn btn-outline-light" data-event-brochure href="assets/events/leadership-workshop.pdf">Download Brochure</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section event2-overview">
+        <div class="container event2-split">
+          <div class="event2-overview-copy">
+            <span class="eyebrow">Overview</span>
+            <h2 data-event-overview-title>Event Overview</h2>
+            <p class="lead" data-event-summary></p>
+            <p data-event-overview-copy></p>
+          </div>
+          <div class="event2-overview-media">
+            <img data-event-overview-image src="" alt="" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tight event2-included">
+        <div class="container">
+          <span class="eyebrow">Included</span>
+          <h2>What Is Included</h2>
+          <div class="event2-included-grid" data-event-included></div>
+        </div>
+      </section>
+
+      <section class="section section-tight event2-experience">
+        <div class="container">
+          <span class="eyebrow">Experience</span>
+          <h2 data-event-experience-title>Experience</h2>
+          <div class="event2-experience-grid" data-event-experience></div>
+        </div>
+      </section>
+
+      <section class="section section-tight event2-pricing-wrap">
+        <div class="container">
+          <span class="eyebrow">Pricing</span>
+          <h2>Packages</h2>
+          <div class="event2-pricing-grid" data-event-pricing></div>
+        </div>
+      </section>
+
+      <section class="section event2-venue-wrap">
+        <div class="container event2-split event2-venue-split">
+          <div class="event2-venue-media">
+            <img data-event-venue-image src="" alt="" />
+          </div>
+          <article class="card event2-venue-card">
+            <span class="eyebrow no-eyebrow-icon">Venue</span>
+            <h3 data-event-venue-title>Venue</h3>
+            <p data-event-venue-address></p>
+            <ul data-event-venue-details></ul>
+            <p class="event-card-note" data-event-venue-note></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="event2-banner">
+        <div class="container event2-banner-inner">
+          <div>
+            <h2 data-event-cta-title>Reserve your place</h2>
+            <p data-event-cta-copy></p>
+          </div>
+          <a class="btn btn-primary" data-event-register-cta href="#">Register Interest</a>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/components.js"></script>
+    <script>
+      (function () {
+        const ICONS = {
+          calendar:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h2v2h6V2h2v2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3V2Zm13 8H4v10h16V10Z"/></svg>',
+          network:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a3 3 0 0 1 3 3c0 .34-.06.66-.16.96l3.66 2.2a3 3 0 1 1-.99 1.72l-3.73-2.25a3 3 0 0 1-3.56 0L6.49 9.88a3 3 0 1 1-1.01-1.71l3.67-2.2A3 3 0 1 1 12 2Zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM4 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm16 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-8 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/></svg>',
+          certificate:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4l-3 4-3-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 4v2h10V7H7Zm0 4v2h7v-2H7Z"/></svg>',
+          meal:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h2v8a3 3 0 0 1-6 0V2h2v6h2V2Zm7 0h2v8h1a3 3 0 0 1 3 3v9h-2v-9a1 1 0 0 0-1-1h-1v10h-2V2Z"/></svg>',
+          laptop:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16a2 2 0 0 1 2 2v8h-2V7H4v8H2V7a2 2 0 0 1 2-2Zm-2 12h20v2H2v-2Z"/></svg>',
+          users:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11a3 3 0 1 0-2.999-3A3 3 0 0 0 16 11Zm-8 0A3 3 0 1 0 5 8a3 3 0 0 0 3 3Zm0 2c-2.33 0-7 1.17-7 3.5V19h10v-2.5C11 14.17 6.33 13 4 13Zm12 0c-.29 0-.62.02-.97.05A4.77 4.77 0 0 1 21 16.5V19h3v-2.5c0-2.33-4.67-3.5-7-3.5Z"/></svg>',
+          chart:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16v2H2V3h2v16Zm4-4-3.5-3.5 1.4-1.4L8 12.2 12.6 7.6 15 10l4.6-4.6 1.4 1.4L15 13l-2.4-2.4L8 15Z"/></svg>',
+          check:
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.55 16.6-4.2-4.2 1.4-1.4 2.8 2.79 7-7 1.4 1.42-8.4 8.39Z"/></svg>'
+        };
+
+        const EVENT_DATA = {
+          "hr-gala": {
+            title: "The HR Leadership Gala Dinner 2026",
+            tagline: "Celebrating Excellence in People Leadership",
+            heroImage: "assets/images/business%20class.jpg",
+            date: "20 May 2026",
+            location: "The Maslow Hotel, Sandton, Johannesburg",
+            duration: "One Evening",
+            summary: "An exclusive International HR Day celebration bringing together HR leaders, executives, and decision-makers for an evening of recognition, networking, and thought leadership.",
+            overviewTitle: "Event Overview",
+            overviewCopy: "The HR Leadership Gala Dinner is a premium executive event designed to celebrate the impact of human resource professionals in shaping high-performing organisations. This exclusive gathering provides a platform for leaders to connect, reflect, and engage in meaningful conversations around the future of work and leadership.",
+            overviewImage: "assets/images/leadership.jpeg",
+            overviewImageAlt: "The HR Leadership Gala Dinner event visual",
+            included: [
+              { icon: "meal", title: "Gala Dinner Experience", text: "Premium hosted dining in a formal leadership setting." },
+              { icon: "network", title: "Red-Carpet Welcome Reception", text: "A distinguished arrival experience for all attendees." },
+              { icon: "certificate", title: "Keynote by Industry Leaders", text: "Insightful thought-leadership session from top professionals." },
+              { icon: "users", title: "Executive Networking Opportunities", text: "High-level engagement with HR and business decision-makers." }
+            ],
+            experienceTitle: "Event Experience",
+            experienceCards: [
+              { title: "Formal Black-Tie Setting", text: "An elegant evening format aligned with executive standards." },
+              { title: "High-Level Networking", text: "Connect with leaders shaping people strategy and organizational growth." },
+              { title: "Engaging Keynote Discussions", text: "Hear practical perspectives on leadership and the future of work." },
+              { title: "Premium Hospitality Experience", text: "Enjoy a curated guest journey from reception through gala dinner." }
+            ],
+            pricing: [
+              { name: "Standard Ticket", price: "R1,800", items: ["Per attendee", "Full gala access", "Dinner included"], highlight: false },
+              { name: "VIP Ticket", price: "R2,500", items: ["Per attendee", "Premium placement", "Priority networking"], highlight: true },
+              { name: "Table Booking", price: "R16,000", items: ["Seats 10", "Group seating allocation", "Hosted welcome"], highlight: false }
+            ],
+            venueTitle: "Venue & Logistics",
+            venueAddress: "The Maslow Hotel, Sandton, Johannesburg",
+            venueImage: "assets/images/group%20discussion.jpg",
+            venueDetails: ["Event Date: 20 May 2026", "Contact: 087 150 0724", "Email: hr.gala@utc-sa.co.za"],
+            venueNote: "Secure your place early as limited seats are available.",
+            ctaTitle: "Secure your place at this prestigious HR event",
+            ctaCopy: "Connect with leaders shaping the future of work.",
+            courseParam: "The HR Leadership Gala Dinner 2026",
+            brochureHref: "assets/events/leadership-workshop.pdf",
+            brochureText: "Download Brochure"
+          },
+          "secretarial-symposium": {
+            title: "Secretarial & Administrative Professionals Symposium 2026",
+            tagline: "Reimagine. Connect. Celebrate.",
+            heroImage: "assets/images/speaking%20in%20front.jpg",
+            date: "2 - 4 September 2026",
+            location: "Johannesburg",
+            duration: "3 Days",
+            summary: "A premium three-day development experience designed to empower administrative professionals through learning, networking, and celebration.",
+            overviewTitle: "Event Overview",
+            overviewCopy: "The Secretarial and Administrative Professionals Symposium is a dynamic platform focused on empowering professionals with the skills, tools, and confidence needed to thrive in modern workplaces. This immersive experience blends learning, collaboration, and recognition into one impactful event.",
+            overviewImage: "assets/images/secretarial.jpeg",
+            overviewImageAlt: "Secretarial and Administrative Professionals Symposium event visual",
+            included: [
+              { icon: "laptop", title: "Expert-Led Training Sessions", text: "Facilitated by experienced professionals in administrative development." },
+              { icon: "chart", title: "Interactive Workshops", text: "Practical sessions focused on workplace skills and execution." },
+              { icon: "users", title: "Networking Opportunities", text: "Connect with peers and professionals across sectors." },
+              { icon: "certificate", title: "Gala Celebration Experience", text: "A formal celebration and recognition moment for attendees." }
+            ],
+            experienceTitle: "Event Experience",
+            experienceCards: [
+              { title: "Professional Development Sessions", text: "Practical learning designed to strengthen modern administrative capability." },
+              { title: "Team Engagement Activities", text: "Collaborative activities that enhance communication and workplace impact." },
+              { title: "Peer Networking Opportunities", text: "Build meaningful professional relationships and shared learning connections." },
+              { title: "Celebration & Recognition Moments", text: "Acknowledge growth and excellence in the administrative profession." }
+            ],
+            pricing: [
+              { name: "Investment", price: "R13,500", items: ["Per delegate", "3-day programme access", "Workshops and celebration included"], highlight: true }
+            ],
+            venueTitle: "Venue & Logistics",
+            venueAddress: "Johannesburg, Gauteng",
+            venueImage: "assets/images/speaking%20in%20front.jpg",
+            venueDetails: ["Duration: 3 Days", "Contact: 087 150 0724", "Email: info@utc-sa.co.za"],
+            venueNote: "Additional programme logistics are shared after registration.",
+            ctaTitle: "Join a transformative experience",
+            ctaCopy: "Designed to elevate administrative excellence and professional growth.",
+            courseParam: "Secretarial and Administrative Professionals Symposium 2026",
+            brochureHref: "assets/events/project-management-training.pdf",
+            brochureText: "Download Programme",
+            registerText: "Register Now"
+          }
+        };
+
+        function getEventKey() {
+          const params = new URLSearchParams(window.location.search);
+          const key = params.get("event") || "hr-gala";
+          return Object.prototype.hasOwnProperty.call(EVENT_DATA, key) ? key : "hr-gala";
+        }
+
+        function buildRegistrationHref(event) {
+          const params = new URLSearchParams();
+          params.set("event", getEventKey());
+          params.set("course", event.courseParam);
+          params.set("date", event.date);
+          params.set("location", event.location);
+          params.set("duration", event.duration);
+          params.set("source", "event");
+          return `request-training.html?${params.toString()}`;
+        }
+
+        function bindText(selector, value) {
+          document.querySelectorAll(selector).forEach((element) => {
+            element.textContent = value;
+          });
+        }
+
+        function iconMarkup(type) {
+          return ICONS[type] || ICONS.check;
+        }
+
+        function renderEvent() {
+          const event = EVENT_DATA[getEventKey()];
+          document.title = `${event.title} | Ultimate Training Consultants`;
+
+          const descriptionMeta = document.querySelector('meta[name="description"]');
+          if (descriptionMeta) {
+            descriptionMeta.setAttribute("content", event.summary);
+          }
+
+          bindText("[data-event-title]", event.title);
+          bindText("[data-event-tagline]", event.tagline);
+          bindText("[data-event-date]", event.date);
+          bindText("[data-event-location]", event.location);
+          bindText("[data-event-duration]", event.duration);
+          bindText("[data-event-summary]", event.summary);
+          bindText("[data-event-overview-title]", event.overviewTitle);
+          bindText("[data-event-overview-copy]", event.overviewCopy);
+          bindText("[data-event-experience-title]", event.experienceTitle);
+          bindText("[data-event-venue-title]", event.venueTitle);
+          bindText("[data-event-venue-address]", event.venueAddress);
+          bindText("[data-event-venue-note]", event.venueNote);
+          bindText("[data-event-cta-title]", event.ctaTitle);
+          bindText("[data-event-cta-copy]", event.ctaCopy);
+
+          const hero = document.querySelector("[data-event-hero]");
+          if (hero) {
+            hero.style.backgroundImage = `linear-gradient(120deg, rgba(8, 31, 52, 0.88), rgba(0, 98, 156, 0.65)), url('${event.heroImage}')`;
+          }
+
+          const overviewImage = document.querySelector("[data-event-overview-image]");
+          if (overviewImage) {
+            overviewImage.src = event.overviewImage;
+            overviewImage.alt = event.overviewImageAlt || `${event.title} overview image`;
+          }
+
+          const venueImage = document.querySelector("[data-event-venue-image]");
+          if (venueImage) {
+            venueImage.src = event.venueImage;
+            venueImage.alt = `${event.title} venue image`;
+          }
+
+          const includedTarget = document.querySelector("[data-event-included]");
+          if (includedTarget) {
+            includedTarget.innerHTML = event.included
+              .map(
+                (item) => `
+                  <article class="card event2-included-card">
+                    <span class="event2-icon" aria-hidden="true">${iconMarkup(item.icon)}</span>
+                    <h3>${item.title}</h3>
+                    <p>${item.text}</p>
+                  </article>
+                `
+              )
+              .join("");
+          }
+
+          const experienceTarget = document.querySelector("[data-event-experience]");
+          if (experienceTarget) {
+            experienceTarget.innerHTML = event.experienceCards
+              .map(
+                (item) => `
+                  <article class="card event2-experience-card">
+                    <h3>${item.title}</h3>
+                    <p>${item.text}</p>
+                  </article>
+                `
+              )
+              .join("");
+          }
+
+          const pricingTarget = document.querySelector("[data-event-pricing]");
+          if (pricingTarget) {
+            pricingTarget.innerHTML = event.pricing
+              .map(
+                (item) => `
+                  <article class="card event2-pricing-card${item.highlight ? " is-featured" : ""}">
+                    <h3>${item.name}</h3>
+                    <p class="event2-price">${item.price}</p>
+                    <ul>${item.items.map((line) => `<li>${line}</li>`).join("")}</ul>
+                    <a class="btn ${item.highlight ? "btn-primary" : "btn-outline"}" href="${buildRegistrationHref(event)}">Choose Package</a>
+                  </article>
+                `
+              )
+              .join("");
+          }
+
+          const venueDetails = document.querySelector("[data-event-venue-details]");
+          if (venueDetails) {
+            venueDetails.innerHTML = event.venueDetails.map((line) => `<li>${line}</li>`).join("");
+          }
+
+          const registerHref = buildRegistrationHref(event);
+          document.querySelectorAll("[data-event-register], [data-event-register-cta]").forEach((link) => {
+            link.setAttribute("href", registerHref);
+            link.textContent = event.registerText || "Reserve Your Seat";
+          });
+
+          const brochureButton = document.querySelector("[data-event-brochure]");
+          if (brochureButton) {
+            brochureButton.setAttribute("href", event.brochureHref || "courses.html");
+            brochureButton.textContent = event.brochureText || "Download Brochure";
+          }
+        }
+
+        window.UTCComponents.initPage({ page: "event-detail" });
+        renderEvent();
+      })();
+    </script>
+  </body>
+</html>
