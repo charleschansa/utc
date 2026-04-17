@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Details | Ultimate Training Consultants</title>
+    <meta
+      name="description"
+      content="Review selected course information and continue to registration."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="courses-page">
+    <div id="site-header"></div>
+
+    <main>
+      <section class="hero hero-events">
+        <div class="container hero-page-content">
+          <span class="eyebrow eyebrow-light">Course Details</span>
+          <h1 id="course-detail-title">Selected Course</h1>
+          <p class="lead lead-light" id="course-detail-summary">
+            Review this course and proceed to registration.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" id="course-detail-register" href="register.html">Register</a>
+            <a class="btn btn-outline-light" href="courses.html">Back to Courses</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tight">
+        <div class="container hero-card">
+          <span class="eyebrow no-eyebrow-icon">Next Step</span>
+          <h2>Need full curriculum and delivery options?</h2>
+          <p>
+            Contact the UTC team for full agenda details, available dates, in-house customization,
+            and facilitator profiles.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="contact.html">Contact UTC</a>
+            <a class="btn btn-outline" href="courses.html">View More Courses</a>
+          </div>
+        </div>
+      </section>
+
+      <div id="site-cta"></div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/components.js"></script>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var course = params.get("course") || "Selected Course";
+
+        var title = document.getElementById("course-detail-title");
+        var summary = document.getElementById("course-detail-summary");
+        var register = document.getElementById("course-detail-register");
+
+        if (title) title.textContent = course;
+        if (summary) summary.textContent = "You selected: " + course + ". Continue to complete your registration.";
+        if (register) register.setAttribute("href", "/register.html?course=" + encodeURIComponent(course));
+      })();
+
+      window.UTCComponents.initPage({
+        page: "courses",
+        cta: {
+          title: "Ready to secure your seat?",
+          text: "Complete your registration and our team will contact you with confirmation details.",
+          buttonText: "Go To Register",
+          buttonHref: "register.html"
+        }
+      });
+    </script>
+  </body>
+</html>

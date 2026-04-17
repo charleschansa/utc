@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register | Ultimate Training Consultants</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="courses-page">
+    <main>
+      <section class="section">
+        <div class="container hero-card">
+          <span class="eyebrow no-eyebrow-icon">Registration</span>
+          <h1>Redirecting to Registration Form...</h1>
+          <p class="lead">If you are not redirected automatically, use the button below.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" id="register-fallback" href="request-training.html">Continue to Registration</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var query = window.location.search || "";
+        var target = "request-training.html" + query;
+        var fallback = document.getElementById("register-fallback");
+        if (fallback) {
+          fallback.setAttribute("href", target);
+        }
+        window.location.replace(target);
+      })();
+    </script>
+  </body>
+</html>

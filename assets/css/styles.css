@@ -252,6 +252,10 @@ body {
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -1022,6 +1026,242 @@ img {
     url("../images/classroom%20training.webp");
 }
 
+.policy-layout {
+  max-width: 1160px;
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.policy-content {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 98, 156, 0.12);
+  background:
+    radial-gradient(circle at top right, rgba(232, 1, 1, 0.06), transparent 36%),
+    linear-gradient(160deg, #ffffff 0%, #f7fbff 100%);
+  box-shadow: 0 14px 34px rgba(10, 37, 64, 0.08);
+}
+
+.policy-sidebar {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 98, 156, 0.12);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(0, 98, 156, 0.09), transparent 46%),
+    linear-gradient(160deg, #ffffff 0%, #f7fbff 100%);
+  position: sticky;
+  top: 96px;
+  box-shadow: 0 12px 28px rgba(10, 37, 64, 0.08);
+}
+
+.policy-hero-pills {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.policy-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.97);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.policy-sidebar h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+}
+
+.policy-toc {
+  display: grid;
+  gap: 6px;
+}
+
+.policy-toc a {
+  color: #284964;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: rgba(0, 98, 156, 0.03);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.policy-toc a:hover {
+  color: var(--color-primary);
+  border-color: rgba(0, 98, 156, 0.2);
+  background: rgba(0, 98, 156, 0.08);
+  transform: translateX(2px);
+}
+
+.policy-sidebar-actions {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.policy-sidebar-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.policy-print-btn {
+  cursor: pointer;
+}
+
+.policy-sidebar-contact {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 98, 156, 0.12);
+  display: grid;
+  gap: 6px;
+}
+
+.policy-sidebar-contact p {
+  margin: 0;
+}
+
+.policy-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 98, 156, 0.12);
+  background: rgba(0, 98, 156, 0.03);
+}
+
+.policy-meta-grid p {
+  margin: 0;
+}
+
+.policy-highlight {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 1, 1, 0.18);
+  background: linear-gradient(145deg, rgba(232, 1, 1, 0.05), rgba(0, 98, 156, 0.05));
+}
+
+.policy-highlight h2 {
+  margin: 0 0 10px;
+}
+
+.policy-intro-banner {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 98, 156, 0.16);
+  background: linear-gradient(145deg, rgba(0, 98, 156, 0.07), rgba(255, 255, 255, 0.72));
+}
+
+.policy-intro-banner h2 {
+  margin: 0 0 8px;
+}
+
+.policy-intro-banner p {
+  margin: 0;
+  color: #37536b;
+}
+
+.policy-content h2 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  scroll-margin-top: 90px;
+}
+
+.policy-content > h2 {
+  margin-top: 24px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 98, 156, 0.16);
+  background: linear-gradient(145deg, rgba(0, 98, 156, 0.08), rgba(255, 255, 255, 0.72));
+  color: #0f3a5b;
+  box-shadow: 0 6px 16px rgba(10, 37, 64, 0.06);
+}
+
+.policy-section + .policy-section {
+  margin-top: 18px;
+}
+
+.policy-section {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 98, 156, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.policy-section h3 {
+  margin: 0 0 8px;
+  color: #113b5d;
+}
+
+.policy-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.policy-content p {
+  margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+  .policy-layout {
+    grid-template-columns: 1fr;
+    max-width: 980px;
+  }
+
+  .policy-sidebar {
+    position: static;
+  }
+
+  .policy-toc {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .policy-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-toc {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .policy-sidebar,
+  #site-header,
+  #site-footer,
+  #site-cta,
+  .cta-wrap,
+  .scroll-progress,
+  .back-to-top {
+    display: none !important;
+  }
+
+  .policy-layout {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .policy-content {
+    box-shadow: none;
+    border-color: rgba(0, 0, 0, 0.18);
+  }
+}
+
 .about-overview-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
@@ -1496,26 +1736,260 @@ img {
   margin-top: 24px;
 }
 
+.course-calendar-month {
+  padding: 18px;
+  border: 1px solid rgba(0, 98, 156, 0.12);
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 249, 253, 0.92) 100%);
+}
+
 .course-month-title {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 98, 156, 0.16);
   color: var(--color-primary);
-  font-size: 1.08rem;
+  font-size: 1rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
+.courses-catalog {
+  margin: 22px 0 0;
+}
+
+.courses-catalog-toolbar {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.courses-search-field {
+  display: grid;
+  gap: 8px;
+  max-width: 560px;
+}
+
+.courses-search-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #173a5b;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.courses-search-input {
+  width: 100%;
+  border: 1px solid rgba(0, 98, 156, 0.18);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--color-text);
+  background: linear-gradient(160deg, #ffffff 0%, #f7fbff 100%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.courses-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 98, 156, 0.14);
+}
+
+.courses-search-results {
+  margin: 0;
+  color: #4e6175;
+  font-weight: 600;
+}
+
+.courses-empty-state {
+  margin: 10px 0 0;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px dashed rgba(0, 98, 156, 0.2);
+  background: rgba(0, 98, 156, 0.03);
+  color: #40576d;
+  text-align: center;
+}
+
+.courses-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.courses-pagination-btn {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 98, 156, 0.18);
+  background: #ffffff;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.courses-pagination-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(0, 98, 156, 0.08);
+  border-color: rgba(0, 98, 156, 0.32);
+}
+
+.courses-pagination-btn.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.courses-pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .course-schedule-grid {
   display: grid;
-  gap: 16px;
+  gap: 20px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .course-schedule-item {
-  border-top: 4px solid rgba(0, 98, 156, 0.24);
+  position: relative;
+  display: grid;
+  gap: 0;
+  border-radius: 10px;
+  padding: 20px;
+  background: linear-gradient(160deg, #ffffff 0%, #f7fbff 100%);
+  border: 1px solid rgba(0, 98, 156, 0.12);
+  box-shadow: 0 4px 12px rgba(10, 37, 64, 0.06);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.course-schedule-item p {
+.course-schedule-item::before,
+.course-schedule-item::after {
+  display: none;
+}
+
+.course-schedule-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(10, 37, 64, 0.12);
+  border-color: rgba(0, 98, 156, 0.24);
+}
+
+.course-schedule-item > * {
+  grid-column: auto;
+}
+
+.course-schedule-item h3,
+.course-card-title {
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #163552;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(18px * 1.4 * 2);
+}
+
+.course-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.course-card-month-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background: rgba(0, 98, 156, 0.1);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.course-card-duration {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.course-card-meta-list {
+  display: grid;
+  gap: 8px;
+}
+
+.course-card-meta-line,
+.course-card-audience {
   margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.course-card-meta-line {
+  color: #4e6175;
+}
+
+.course-card-date::before {
+  content: "📅 ";
+}
+
+.course-card-location::before {
+  content: "📍 ";
+}
+
+.course-card-audience {
+  margin-top: 10px;
+  color: #40576d;
+}
+
+.course-card-audience::before {
+  content: "👥 ";
+}
+
+.course-card-actions,
+.course-schedule-item .event-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: nowrap;
+  margin-top: 15px;
+}
+
+.course-card-actions .btn,
+.course-schedule-item .event-actions .btn {
+  flex: 1 1 0;
+  width: auto;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.course-card-register-btn,
+.course-schedule-item .event-actions .btn.btn-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.course-extra-detail,
+.course-read-more,
+.course-price-label,
+.course-schedule-item .event-meta {
+  display: none !important;
 }
 
 .events-intro-card {
@@ -1563,11 +2037,17 @@ img {
 
 .event-meta {
   margin: 0;
-  color: #3d4e63;
+  color: #23415f;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(0, 98, 156, 0.08);
+  border: 1px solid rgba(0, 98, 156, 0.14);
+  width: fit-content;
+  font-size: 0.69rem;
 }
 
 .event-meta-icon {
@@ -1584,40 +2064,37 @@ img {
 
 .event-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .course-price-label {
-  margin: -4px 0 8px;
+  margin: 0;
   font-weight: 700;
-  color: var(--color-primary);
-  font-size: 0.95rem;
+  color: #0f4b79;
+  font-size: 0.74rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  width: fit-content;
+  border: 1px solid rgba(0, 98, 156, 0.2);
+  background: rgba(225, 242, 253, 0.7);
 }
 
-.course-meta-type {
-  margin: -4px 0 8px;
-  font-size: 0.9rem;
+.course-price-label::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(0, 98, 156, 0.14);
 }
 
-.course-type-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.course-type-badge.virtual {
-  background-color: #e3f2fd;
-  color: #1976d2;
-}
-
-.course-type-badge.physical {
-  background-color: #f3e5f5;
-  color: #7b1fa2;
+.course-schedule-item.event-card {
+  border-top: 0;
 }
 
 .event-home-card {
@@ -3300,7 +3777,7 @@ body[data-event="secretarial-symposium"] .event-registration-box {
   }
 
   .course-schedule-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .courses-calendar-head {
@@ -3434,6 +3911,34 @@ body[data-event="secretarial-symposium"] .event-registration-box {
   .course-schedule-grid,
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .course-calendar-month {
+    padding: 14px;
+  }
+
+  .course-schedule-item {
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .courses-catalog-toolbar {
+    margin-bottom: 16px;
+  }
+
+  .course-schedule-item h3,
+  .course-card-title {
+    font-size: 17px;
+  }
+
+  .course-card-actions,
+  .course-schedule-item .event-actions {
+    flex-wrap: wrap;
+  }
+
+  .course-card-actions .btn,
+  .course-schedule-item .event-actions .btn {
+    font-size: 13px;
   }
 
   .courses-calendar-grid {

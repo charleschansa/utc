@@ -63,6 +63,7 @@
             <h4>Quick Links</h4>
             <div class="footer-links footer-links-quick">
               ${navItems.map((item) => `<a href="${item.href}">${item.label}</a>`).join("")}
+              <a href="privacy-policy.html">Privacy Notice</a>
             </div>
           </div>
           <div class="footer-panel">
@@ -75,7 +76,7 @@
         </div>
         <div class="footer-bottom">
           <div class="container footer-bottom-inner">
-            <p class="footer-legal">&copy; ${year} Ultimate Training Consultants. All rights reserved.</p>
+            <p class="footer-legal">&copy; ${year} Ultimate Training Consultants. All rights reserved. <a href="privacy-policy.html">Privacy Notice</a></p>
             <p class="footer-credit">Designed and developed by <a href="http://digitalfingerszm.netlify.app/" target="_blank" rel="noopener noreferrer">Digitalfingers Technologies</a>.</p>
           </div>
         </div>
@@ -279,6 +280,9 @@
   function initCardIcons() {
     const headings = document.querySelectorAll(".card h3");
     headings.forEach((heading) => {
+      if (heading.closest(".course-schedule-item")) {
+        return;
+      }
       if (heading.querySelector(".icon-badge")) {
         return;
       }
@@ -506,10 +510,17 @@
   function buildCourseRequestHref(card) {
     const title = (card.querySelector("h3")?.textContent || "").trim();
     const metaValues = Array.from(card.querySelectorAll(".event-meta")).map((item) => item.textContent.replace(/^\s+|\s+$/g, ""));
-    const date = metaValues.find((text) => text.toLowerCase().startsWith("date:"))?.replace(/^date:\s*/i, "") || "";
-    const locationText = metaValues.find((text) => text.toLowerCase().startsWith("location:"))?.replace(/^location:\s*/i, "") || "";
-    const courseType = locationText.toLowerCase().includes("physical") ? "Physical" : "Virtual";
-    const duration = card.querySelector("p:not(.event-meta)")?.textContent?.trim() || "";
+    const dateMeta = metaValues.find((text) => text.toLowerCase().startsWith("date:")) || metaValues[0] || "";
+    const locationMeta = metaValues.find((text) => text.toLowerCase().startsWith("location:")) || metaValues[1] || "";
+    const date = dateMeta.replace(/^date:\s*/i, "").trim();
+    const locationText = locationMeta.replace(/^location:\s*/i, "").trim();
+    const courseType = locationText.toLowerCase().includes("virtual") ? "Virtual" : "Physical";
+    const explicitDuration = Array.from(card.querySelectorAll("p")).find((paragraph) =>
+      paragraph.textContent.trim().toLowerCase().startsWith("duration:")
+    );
+    const duration = explicitDuration
+      ? explicitDuration.textContent.replace(/^duration:\s*/i, "").trim()
+      : getDurationFromDateText(date);
     const price = getCoursePriceForDuration(duration);
 
     const params = new URLSearchParams();
@@ -531,6 +542,25 @@
     return "";
   }
 
+  function getDurationFromDateText(dateText) {
+    const normalized = String(dateText || "").replace(/\s+/g, " ").trim();
+    const rangeMatch = normalized.match(/(\d{1,2})\s*[–-]\s*(\d{1,2})/);
+    if (rangeMatch) {
+      const start = Number(rangeMatch[1]);
+      const end = Number(rangeMatch[2]);
+      if (!Number.isNaN(start) && !Number.isNaN(end) && end >= start) {
+        const days = end - start + 1;
+        return `${days} Day${days > 1 ? "s" : ""}`;
+      }
+    }
+
+    if (/\b\d{1,2}\b/.test(normalized)) {
+      return "1 Day";
+    }
+
+    return "";
+  }
+
   function buildCoursePricingOptions(duration) {
     const price = getCoursePriceForDuration(duration);
     return {
@@ -549,14 +579,21 @@
 
     const cards = Array.from(document.querySelectorAll(".course-schedule-item"));
     cards.forEach((card) => {
+      if (card.dataset.designUpgraded === "true") {
+        return;
+      }
       const durationParagraph = Array.from(card.querySelectorAll("p")).find((paragraph) =>
         paragraph.textContent.trim().toLowerCase().startsWith("duration:")
       );
-      if (!durationParagraph || card.querySelector(".course-price-label")) {
+      if (card.querySelector(".course-price-label")) {
         return;
       }
 
-      const durationText = durationParagraph.textContent.replace(/^duration:\s*/i, "").trim();
+      const metaValues = Array.from(card.querySelectorAll(".event-meta")).map((item) => item.textContent.replace(/^\s+|\s+$/g, ""));
+      const dateMeta = metaValues.find((text) => text.toLowerCase().startsWith("date:")) || metaValues[0] || "";
+      const durationText = durationParagraph
+        ? durationParagraph.textContent.replace(/^duration:\s*/i, "").trim()
+        : getDurationFromDateText(dateMeta.replace(/^date:\s*/i, "").trim());
       const price = getCoursePriceForDuration(durationText);
       if (!price) {
         return;
@@ -565,37 +602,64 @@
       const priceLine = document.createElement("p");
       priceLine.className = "course-price-label";
       priceLine.textContent = `Price: ${price}`;
-      durationParagraph.insertAdjacentElement("afterend", priceLine);
+      const locationMeta = card.querySelectorAll(".event-meta")[1];
+      if (locationMeta) {
+        locationMeta.insertAdjacentElement("afterend", priceLine);
+      } else {
+        card.appendChild(priceLine);
+      }
     });
-
-    addCourseBadges(page);
   }
 
-  function addCourseBadges(page) {
+  function initCourseCardExpanders(page) {
     if (page !== "courses") return;
 
     const cards = Array.from(document.querySelectorAll(".course-schedule-item"));
-    cards.forEach((card) => {
-      if (card.querySelector(".course-meta-type")) {
+    cards.forEach((card, index) => {
+      if (card.dataset.designUpgraded === "true") {
+        return;
+      }
+      if (card.querySelector(".course-read-more")) {
         return;
       }
 
-      const locationMeta = Array.from(card.querySelectorAll(".event-meta")).find((el) =>
-        el.textContent.toLowerCase().includes("location:")
-      );
+      const detailParagraphs = Array.from(card.querySelectorAll("p")).filter((paragraph) => {
+        if (paragraph.classList.contains("event-meta")) return false;
+        if (paragraph.classList.contains("course-price-label")) return false;
+        return true;
+      });
 
-      if (!locationMeta) {
+      if (detailParagraphs.length === 0) {
         return;
       }
 
-      const locationText = locationMeta.textContent.toLowerCase();
-      const courseType = locationText.includes("physical") ? "Physical" : "Virtual";
-      const badgeClass = courseType === "Physical" ? "physical" : "virtual";
+      detailParagraphs.forEach((paragraph) => {
+        paragraph.classList.add("course-extra-detail", "is-collapsed");
+      });
 
-      const metaTypeP = document.createElement("p");
-      metaTypeP.className = "course-meta-type";
-      metaTypeP.innerHTML = `<span class="course-type-badge ${badgeClass}">${courseType}</span>`;
-      locationMeta.insertAdjacentElement("afterend", metaTypeP);
+      const actions = card.querySelector(".event-actions");
+      if (!actions) {
+        return;
+      }
+
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "course-read-more";
+      toggle.textContent = "Read more";
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", `Read more details for course ${index + 1}`);
+
+      toggle.addEventListener("click", function () {
+        const expanded = card.classList.toggle("is-expanded");
+        toggle.textContent = expanded ? "Show less" : "Read more";
+        toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+
+        detailParagraphs.forEach((paragraph) => {
+          paragraph.classList.toggle("is-collapsed", !expanded);
+        });
+      });
+
+      actions.insertAdjacentElement("beforebegin", toggle);
     });
   }
 
@@ -617,6 +681,224 @@
     });
 
     initCoursePricingLabels(page);
+    initCourseCardExpanders(page);
+  }
+
+  function initCourseCardDesign(page) {
+    if (page !== "courses") {
+      return;
+    }
+
+    const monthSections = Array.from(document.querySelectorAll(".course-calendar-month"));
+    monthSections.forEach((section) => {
+      const monthTitle = (section.querySelector(".course-month-title")?.textContent || "").trim();
+      const cards = Array.from(section.querySelectorAll(".course-schedule-item"));
+
+      cards.forEach((card) => {
+        if (card.dataset.designUpgraded === "true") {
+          return;
+        }
+
+        const titleText = (card.querySelector("h3")?.textContent || "").trim();
+        const metaItems = Array.from(card.querySelectorAll(".event-meta"));
+        const dateText = (metaItems[0]?.textContent || "").trim();
+        const locationText = (metaItems[1]?.textContent || "").trim();
+        const detailParagraphs = Array.from(card.querySelectorAll("p")).filter((paragraph) => {
+          return !paragraph.classList.contains("event-meta") && !paragraph.classList.contains("course-price-label");
+        });
+
+        const audienceParagraph = detailParagraphs.find((paragraph) => paragraph.textContent.trim().toLowerCase().startsWith("target audience:"));
+        const audienceText = audienceParagraph
+          ? audienceParagraph.textContent.replace(/^target audience:\s*/i, "").trim()
+          : "";
+
+        const durationText = getDurationFromDateText(dateText) || "1 Day";
+        const registerHref = buildCourseRequestHref(card);
+
+        card.innerHTML = `
+          <div class="course-card-top-row">
+            <span class="course-card-month-badge">${monthTitle.toUpperCase()}</span>
+            <span class="course-card-duration">${durationText}</span>
+          </div>
+          <h3 class="course-card-title">${titleText}</h3>
+          <div class="course-card-meta-list">
+            <p class="course-card-meta-line course-card-date">${dateText}</p>
+            <p class="course-card-meta-line course-card-location">${locationText}</p>
+          </div>
+          <p class="course-card-audience">${audienceText}</p>
+          <div class="event-actions course-card-actions">
+            <a class="btn btn-primary course-card-register-btn" href="${registerHref}">Register</a>
+          </div>
+        `;
+
+        card.dataset.searchText = [
+          monthTitle,
+          titleText,
+          dateText,
+          locationText,
+          audienceText,
+          durationText
+        ].join(" ").toLowerCase();
+        card.dataset.designUpgraded = "true";
+      });
+    });
+  }
+
+  function initCourseSearchAndPagination(page) {
+    if (page !== "courses") {
+      return;
+    }
+
+    const monthSections = Array.from(document.querySelectorAll(".course-calendar-month"));
+    if (!monthSections.length) {
+      return;
+    }
+
+    const cards = monthSections.flatMap((section) => Array.from(section.querySelectorAll(".course-schedule-item")));
+    if (!cards.length) {
+      return;
+    }
+
+    const anchor = document.querySelector(".courses-calendar-panel");
+    if (!anchor) {
+      return;
+    }
+
+    let catalog = document.querySelector("[data-course-catalog]");
+    if (!catalog) {
+      catalog = document.createElement("section");
+      catalog.className = "courses-catalog";
+      catalog.setAttribute("data-course-catalog", "");
+      catalog.innerHTML = `
+        <div class="courses-catalog-toolbar">
+          <label class="courses-search-field" for="course-search-input">
+            <span class="courses-search-label">Search Courses</span>
+            <input
+              id="course-search-input"
+              class="courses-search-input"
+              type="search"
+              placeholder="Search by title, month, location or audience"
+              data-course-search
+            />
+          </label>
+          <p class="courses-search-results" data-course-results></p>
+        </div>
+        <div class="course-schedule-grid" data-course-master-grid></div>
+        <p class="courses-empty-state" data-course-empty hidden>No courses match your search.</p>
+        <nav class="courses-pagination" aria-label="Course pagination" data-course-pagination></nav>
+      `;
+      anchor.insertAdjacentElement("afterend", catalog);
+    }
+
+    const masterGrid = catalog.querySelector("[data-course-master-grid]");
+    const searchInput = catalog.querySelector("[data-course-search]");
+    const results = catalog.querySelector("[data-course-results]");
+    const emptyState = catalog.querySelector("[data-course-empty]");
+    const pagination = catalog.querySelector("[data-course-pagination]");
+    if (!masterGrid || !searchInput || !results || !emptyState || !pagination) {
+      return;
+    }
+
+    cards.forEach((card) => {
+      masterGrid.appendChild(card);
+    });
+
+    monthSections.forEach((section) => {
+      section.hidden = true;
+    });
+
+    const monthJump = document.querySelector(".courses-month-jump");
+    if (monthJump) {
+      monthJump.hidden = true;
+    }
+
+    const pageSize = 9;
+    let currentPage = 1;
+
+    function renderPagination(totalPages) {
+      pagination.innerHTML = "";
+      if (totalPages <= 1) {
+        return;
+      }
+
+      const prev = document.createElement("button");
+      prev.type = "button";
+      prev.className = "courses-pagination-btn";
+      prev.textContent = "Prev";
+      prev.disabled = currentPage === 1;
+      prev.addEventListener("click", function () {
+        if (currentPage > 1) {
+          currentPage -= 1;
+          render();
+        }
+      });
+      pagination.appendChild(prev);
+
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `courses-pagination-btn${pageNumber === currentPage ? " is-active" : ""}`;
+        button.textContent = String(pageNumber);
+        button.setAttribute("aria-label", `Go to page ${pageNumber}`);
+        button.addEventListener("click", function () {
+          currentPage = pageNumber;
+          render();
+        });
+        pagination.appendChild(button);
+      }
+
+      const next = document.createElement("button");
+      next.type = "button";
+      next.className = "courses-pagination-btn";
+      next.textContent = "Next";
+      next.disabled = currentPage === totalPages;
+      next.addEventListener("click", function () {
+        if (currentPage < totalPages) {
+          currentPage += 1;
+          render();
+        }
+      });
+      pagination.appendChild(next);
+    }
+
+    function render() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = cards.filter((card) => {
+        const searchText = card.dataset.searchText || card.textContent.toLowerCase();
+        return searchText.includes(query);
+      });
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      if (currentPage > totalPages) {
+        currentPage = totalPages;
+      }
+
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      const visibleCards = new Set(filtered.slice(start, end));
+
+      cards.forEach((card) => {
+        card.hidden = !visibleCards.has(card);
+      });
+
+      if (filtered.length === 0) {
+        results.textContent = "0 courses found";
+        emptyState.hidden = false;
+        pagination.innerHTML = "";
+        return;
+      }
+
+      emptyState.hidden = true;
+      results.textContent = `Showing ${start + 1}-${Math.min(end, filtered.length)} of ${filtered.length} courses`;
+      renderPagination(totalPages);
+    }
+
+    searchInput.addEventListener("input", function () {
+      currentPage = 1;
+      render();
+    });
+
+    render();
   }
 
   function initCoursesCalendar() {
@@ -638,33 +920,67 @@
       "June",
       "July",
       "August",
-      "September"
+      "September",
+      "October",
+      "November",
+      "December"
     ];
 
-    const courseEntries = [
-      { title: "Strategic Planning", date: "2026-05-05", location: "Virtual", duration: "2 Days" },
-      { title: "Strategic Planning", date: "2026-05-06", location: "Virtual", duration: "2 Days" },
-      { title: "Workplace Ethics", date: "2026-05-12", location: "Virtual", duration: "1 Day" },
-      { title: "Supervisory Skills", date: "2026-05-19", location: "Virtual", duration: "2 Days" },
-      { title: "Supervisory Skills", date: "2026-05-20", location: "Virtual", duration: "2 Days" },
-      { title: "Risk Management", date: "2026-06-02", location: "Virtual", duration: "2 Days" },
-      { title: "Risk Management", date: "2026-06-03", location: "Virtual", duration: "2 Days" },
-      { title: "Problem Solving & Decision Making", date: "2026-06-09", location: "Virtual", duration: "1 Day" },
-      { title: "Negotiation Skills", date: "2026-06-16", location: "Virtual", duration: "1 Day" },
-      { title: "Financial Management for Non-Financial Managers", date: "2026-07-07", location: "Virtual", duration: "2 Days" },
-      { title: "Financial Management for Non-Financial Managers", date: "2026-07-08", location: "Virtual", duration: "2 Days" },
-      { title: "Supply Chain Management", date: "2026-07-14", location: "Virtual", duration: "1 Day" },
-      { title: "Procurement Management", date: "2026-07-21", location: "Virtual", duration: "2 Days" },
-      { title: "Procurement Management", date: "2026-07-22", location: "Virtual", duration: "2 Days" },
-      { title: "Human Resource Management", date: "2026-08-04", location: "Virtual", duration: "2 Days" },
-      { title: "Human Resource Management", date: "2026-08-05", location: "Virtual", duration: "2 Days" },
-      { title: "Labour Law", date: "2026-08-11", location: "Virtual", duration: "1 Day" },
-      { title: "Employee Relations", date: "2026-08-18", location: "Virtual", duration: "1 Day" },
-      { title: "Advanced Leadership", date: "2026-09-01", location: "Virtual", duration: "2 Days" },
-      { title: "Advanced Leadership", date: "2026-09-02", location: "Virtual", duration: "2 Days" },
-      { title: "Coaching & Mentoring", date: "2026-09-08", location: "Virtual", duration: "1 Day" },
-      { title: "Workplace Diversity", date: "2026-09-15", location: "Virtual", duration: "1 Day" }
-    ];
+    function normaliseCourseField(text) {
+      return String(text || "").replace(/^[^\w\d]+/, "").replace(/\s+/g, " ").trim();
+    }
+
+    function expandCourseDates(title, dateText, location, duration) {
+      const normalizedDate = normaliseCourseField(dateText);
+      const match = normalizedDate.match(/^(\d{1,2})(?:\s*[–-]\s*(\d{1,2}))?\s+([A-Za-z]+)\s+(\d{4})$/);
+      if (!match) {
+        return [];
+      }
+
+      const startDay = Number(match[1]);
+      const endDay = Number(match[2] || match[1]);
+      const monthIndex = monthNames.findIndex((month) => month.toLowerCase() === match[3].toLowerCase());
+      const year = Number(match[4]);
+
+      if (monthIndex === -1 || Number.isNaN(startDay) || Number.isNaN(endDay) || Number.isNaN(year) || endDay < startDay) {
+        return [];
+      }
+
+      const entries = [];
+      for (let day = startDay; day <= endDay; day += 1) {
+        const date = new Date(year, monthIndex, day);
+        if (date.getFullYear() !== year || date.getMonth() !== monthIndex || date.getDate() !== day) {
+          continue;
+        }
+
+        entries.push({
+          title,
+          date: `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+          location,
+          duration
+        });
+      }
+
+      return entries;
+    }
+
+    const courseCards = Array.from(document.querySelectorAll(".course-schedule-item"));
+    const courseEntries = courseCards.flatMap((card) => {
+      const title = normaliseCourseField(card.querySelector(".course-card-title, h3")?.textContent);
+      const dateText = normaliseCourseField(card.querySelector(".course-card-date, .event-meta")?.textContent);
+      const location = normaliseCourseField(card.querySelector(".course-card-location")?.textContent || card.querySelectorAll(".event-meta")[1]?.textContent);
+      const duration = normaliseCourseField(card.querySelector(".course-card-duration")?.textContent) || getDurationFromDateText(dateText);
+
+      if (!title || !dateText) {
+        return [];
+      }
+
+      return expandCourseDates(title, dateText, location, duration);
+    });
+
+    if (!courseEntries.length) {
+      return;
+    }
 
     const eventsByDate = new Map();
     courseEntries.forEach((entry) => {
@@ -958,6 +1274,8 @@
     initBackToTop();
     initConferenceSlider();
     initCoursesConferenceCarousel();
+    initCourseCardDesign(page);
+    initCourseSearchAndPagination(page);
     initCoursesCalendar();
     initCoursesMonthJumps();
     initImagePerformance();
@@ -1306,4 +1624,3 @@
     initPage
   };
 })();
-
