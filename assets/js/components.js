@@ -1,4 +1,7 @@
 (function () {
+  const logoSrc = "assets/images/utc%20logo.png";
+  const logoAlt = "UTC logo";
+
   const navItems = [
     { href: "index.html", label: "Home", key: "home" },
     { href: "about.html", label: "About Us", key: "about" },
@@ -30,7 +33,7 @@
       <header class="site-header">
         <div class="container header-inner">
           <a class="brand" href="index.html" aria-label="Ultimate Training Consultants home">
-            <img class="brand-logo" src="assets/images/utc%20logo.png" alt="UTC logo" />
+            <img class="brand-logo" src="${logoSrc}" alt="${logoAlt}" />
           </a>
           <button class="nav-toggle" type="button" aria-label="Toggle menu">
             <span class="nav-toggle-icon" aria-hidden="true">
@@ -52,7 +55,7 @@
         <div class="container footer-grid">
           <div class="footer-panel footer-brand-panel">
             <div class="footer-brand-top">
-              <img class="footer-brand-logo" src="assets/images/utc%20logo.png" alt="UTC logo" />
+              <img class="footer-brand-logo" src="${logoSrc}" alt="${logoAlt}" />
               <div>
                 <h3>Ultimate Training Consultants</h3>
                 <p>Professional, reliable solutions based on your business needs and long-term goals.</p>
@@ -911,6 +914,22 @@
       return;
     }
 
+    const sharedCourseCalendarEntries = [
+      { title: "MENTAL HEALTH, RESILIENCE & WORKPLACE WELLBEING", dateText: "13 - 14 May 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "HR & PEOPLE STRATEGY IN THE DIGITAL AGE", dateText: "20 May 2026", location: "Johannesburg", duration: "1 Day" },
+      { title: "CONFLICT MANAGEMENT & DIFFICULT WORKPLACE CONVERSATIONS", dateText: "11 - 12 June 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "BUSINESS COMMUNICATION & PRESENTATION EXCELLENCE", dateText: "25 - 26 June 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "AI LITERACY FOR THE MODERN WORKFORCE: PRACTICAL SKILLS FOR THE MODERN EMPLOYEE", dateText: "15 - 16 July 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "HR & PEOPLE STRATEGY IN THE DIGITAL AGE", dateText: "23 - 24 July 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "AI FOR PROCUREMENT & SUPPLY CHAIN PROFESSIONALS", dateText: "12 - 13 August 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "FUTURE-READY LEADERSHIP BOOTCAMP: LEADING PEOPLE, AI & CHANGE", dateText: "26 - 27 August 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "SECRETARIAL & ADMINISTRATIVE PROFESSIONALS SYMPOSIUM 2026", dateText: "2 - 4 September 2026", location: "Sun City Resort", duration: "3 Days" },
+      { title: "AI-POWERED PROJECT MANAGEMENT", dateText: "9 - 11 September 2026", location: "Johannesburg", duration: "3 Days" },
+      { title: "AI FOR FINANCIAL PLANNING & ANALYSIS (FP&A)", dateText: "14 - 15 October 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "ARTIFICIAL INTELLIGENCE IN BANKING & FINANCIAL SERVICES", dateText: "11 - 12 November 2026", location: "Johannesburg", duration: "2 Days" },
+      { title: "AI STRATEGY & INNOVATION FOR LEADERS", dateText: "3 - 4 December 2026", location: "Cape Town", duration: "2 Days" }
+    ];
+
     const monthNames = [
       "January",
       "February",
@@ -927,7 +946,12 @@
     ];
 
     function normaliseCourseField(text) {
-      return String(text || "").replace(/^[^\w\d]+/, "").replace(/\s+/g, " ").trim();
+      return String(text || "")
+        .replace(/â€“|â€”/g, "-")
+        .replace(/[–—]/g, "-")
+        .replace(/^[^\w\d]+/, "")
+        .replace(/\s+/g, " ")
+        .trim();
     }
 
     function expandCourseDates(title, dateText, location, duration) {
@@ -965,7 +989,7 @@
     }
 
     const courseCards = Array.from(document.querySelectorAll(".course-schedule-item"));
-    const courseEntries = courseCards.flatMap((card) => {
+    const domEntries = courseCards.flatMap((card) => {
       const title = normaliseCourseField(card.querySelector(".course-card-title, h3")?.textContent);
       const dateText = normaliseCourseField(card.querySelector(".course-card-date, .event-meta")?.textContent);
       const location = normaliseCourseField(card.querySelector(".course-card-location")?.textContent || card.querySelectorAll(".event-meta")[1]?.textContent);
@@ -977,6 +1001,12 @@
 
       return expandCourseDates(title, dateText, location, duration);
     });
+
+    const fallbackEntries = sharedCourseCalendarEntries.flatMap((item) =>
+      expandCourseDates(item.title, item.dateText, item.location, item.duration)
+    );
+
+    const courseEntries = domEntries.length ? domEntries : fallbackEntries;
 
     if (!courseEntries.length) {
       return;
