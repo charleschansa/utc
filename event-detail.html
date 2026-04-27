@@ -33,6 +33,7 @@
           <div class="hero-actions">
             <a class="btn btn-primary" data-event-register href="#">Reserve Your Seat</a>
             <a class="btn btn-outline-light" data-event-brochure href="assets/events/leadership-workshop.pdf">Download Brochure</a>
+            <a class="btn btn-outline-light" data-event-sponsor href="contact.html" hidden>Sponsor Event</a>
           </div>
         </div>
       </section>
@@ -206,6 +207,45 @@
             brochureHref: "assets/events/project-management-training.pdf",
             brochureText: "Download Programme",
             registerText: "Register Now"
+          },
+          "ai-government-summit-sa-2026": {
+            title: "AI in Goverment Summit South Africa 2026",
+            tagline: "Event details coming soon",
+            heroImage: "assets/images/speaker%20at%20conference.jpg",
+            date: "21 October 2026",
+            location: "South Africa",
+            duration: "1 Day",
+            summary: "AI in Goverment Summit South Africa 2026 takes place on 21 October 2026. Additional event information will be shared on this page as it becomes available.",
+            overviewTitle: "Event Overview",
+            overviewCopy: "This page has been added for the AI in Goverment Summit South Africa 2026. More programme, speaker, and venue details will be published here once they are available.",
+            overviewImage: "assets/images/conference%20speaker.jpg",
+            overviewImageAlt: "AI in Goverment Summit South Africa 2026 event visual",
+            included: [
+              { icon: "calendar", title: "Event Date Confirmed", text: "The summit is scheduled for 21 October 2026." },
+              { icon: "network", title: "South Africa", text: "This event is listed as a South Africa 2026 summit." },
+              { icon: "certificate", title: "Programme Updates Pending", text: "Full agenda and speaker details will be added when available." }
+            ],
+            experienceTitle: "What To Expect",
+            experienceCards: [
+              { title: "Summit Information", text: "The event page is ready and will carry the latest summit details as they are confirmed." },
+              { title: "Registration Updates", text: "Registration and participation information can be shared through the usual enquiry flow." }
+            ],
+            pricing: [
+              { name: "Registration", price: "Details coming soon", items: ["Pricing and package information have not yet been published."], highlight: true }
+            ],
+            venueTitle: "Venue & Logistics",
+            venueAddress: "South Africa",
+            venueImage: "assets/images/business%20meeting.jpg",
+            venueDetails: ["Event Date: 21 October 2026", "Location: South Africa", "Additional venue information coming soon"],
+            venueNote: "Please check back for more event logistics.",
+            ctaTitle: "Stay connected for summit updates",
+            ctaCopy: "Use the usual enquiry flow to register your interest in this event.",
+            courseParam: "AI in Goverment Summit South Africa 2026",
+            brochureHref: "event-detail.html?event=ai-government-summit-sa-2026",
+            brochureText: "View Event Details",
+            registerText: "Register Interest",
+            sponsorHref: "contact.html",
+            sponsorText: "Sponsor Event"
           }
         };
 
@@ -337,6 +377,17 @@
           if (brochureButton) {
             brochureButton.setAttribute("href", event.brochureHref || "courses.html");
             brochureButton.textContent = event.brochureText || "Download Brochure";
+          }
+
+          const sponsorButton = document.querySelector("[data-event-sponsor]");
+          if (sponsorButton) {
+            if (event.sponsorHref) {
+              sponsorButton.hidden = false;
+              sponsorButton.setAttribute("href", event.sponsorHref);
+              sponsorButton.textContent = event.sponsorText || "Sponsor Event";
+            } else {
+              sponsorButton.hidden = true;
+            }
           }
         }
 
